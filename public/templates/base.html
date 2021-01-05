@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+	<head>
+		<title>{{ data.a_first_name }} weds {{ data.b_first_name }}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<noscript>
+			<link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+	</head>
+
+	<body class="is-preload">
+		<!-- Wrapper -->
+		<div id="wrapper">
+			{% block content %}
+			{% endblock %}
+			{% block footer %}
+			<!-- Footer -->
+			<footer id="footer">
+				<p class="copyright"><a href="//gaturu.com">gaturu.com</a></p>
+			</footer>
+			{% endblock %}
+		</div>
+		{% block bg %}
+		<!-- BG -->
+		<div id="bg"></div>
+		{% endblock %}
+		<!-- Scripts -->
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+		<script src="{% static 'js/browser.min.js' %}"></script>
+		<script src="{% static 'js/breakpoints.min.js' %}"></script>
+		<script src="{% static 'js/util.js' %}"></script>
+		<script src="{% static 'js/main.js' %}"></script>
+		<script>
+			function requirePhone(elem, name) {
+				return
+				if (elem.dataset.invite == "kids") {
+					return
+				}
+				var _id = elem.id.replace(name, "")
+				var val = elem.value.trim();
+				if (val) {
+					$("#phone_number" + _id).prop('required', true)
+				} else {
+					$("#phone_number" + _id).prop('required', false)
+				};
+			};
+
+			function deleteSlot(elem) {
+				var _id = elem.id.split(",", 1)[0]
+				var trid = "tr" + _id;
+				var inputid = "delete" + _id;
+				var slot_num = $("#slots").text()
+				var new_slots = parseInt(slot_num) - 1;
+				$("#slots").text(new_slots)
+				$("input[name=" + inputid + "]").val(elem.id);
+				$("#" + trid).addClass("d-none");
+			};
+
+		</script>
+
+	</body>
+
+</html>

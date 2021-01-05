@@ -1,0 +1,161 @@
+{% extends blank_template %}
+{% load static %}
+{% block content %}
+<div class="container">
+  <div class="row align-middle">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <div class="col-md-12">
+        <form action="" method="post" class="row">
+          <div class="card col-md-12 p-0">
+            <div class="card-header text-center">
+              <h2>Setup</h2>
+            </div>
+            <div class="card-body small-text">
+              {% csrf_token %}
+              <div class="col-md-12 text-center">
+                <h5>Couple (a)</h5>
+                <hr>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="a_first_name" class="col-md-3">First Name</label>
+                <div class=" col-md-9">
+                  <input required type="text" class="form-control form-control-sm" id="a_first_name" value="{{ data.a_first_name }}" name="a_first_name" placeholder="First Name">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="a_last_name" class="col-md-3">Last Name</label>
+                <div class=" col-md-9">
+                  <input required type="text" class="form-control form-control-sm" id="a_last_name" value="{{ data.a_last_name }}" name="a_last_name" placeholder="Last Name">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="a_email" class="col-md-3">Email</label>
+                <div class=" col-md-9">
+                  <input required type="email" class="form-control form-control-sm" id="a_email" value="{{ data.a_email }}" name="a_email" placeholder="Email">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="a_parents" class="col-md-3">Parents</label>
+                <div class=" col-md-9">
+                  <input type="text" class="form-control form-control-sm" id="a_parents" value="{{ data.a_parents }}" name="a_parents" placeholder="Parents">
+                </div>
+              </div>
+              <div class="col-md-12 text-center">
+                <h5>Couple (b)</h5>
+                <hr>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="b_first_name" class="col-md-3">First Name</label>
+                <div class=" col-md-9">
+                  <input required type="text" class="form-control form-control-sm" id="b_first_name" value="{{ data.b_first_name }}" name="b_first_name" placeholder="First Name">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="b_last_name" class="col-md-3">Last Name</label>
+                <div class=" col-md-9">
+                  <input required type="text" class="form-control form-control-sm" id="b_last_name" value="{{ data.b_last_name }}" name="b_last_name" placeholder="Last Name">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="b_email" class="col-md-3">Email</label>
+                <div class=" col-md-9">
+                  <input required type="email" class="form-control form-control-sm" id="b_email" value="{{ data.b_email }}" name="b_email" placeholder="Email">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="b_parents" class="col-md-3">Parents</label>
+                <div class=" col-md-9">
+                  <input type="text" class="form-control form-control-sm" id="b_parents" value="{{ data.b_parents }}" name="b_parents" placeholder="Parents">
+                </div>
+              </div>
+              <div class="col-md-12 text-center">
+                <h5>Other</h5>
+                <hr>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="date" class="col-md-3">Wedding Date</label>
+                <div class=" col-md-9">
+                  <input required type="date" class="form-control form-control-sm" id="date" value="{{ data.date }}" name="date">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="time" class="col-md-3">Time</label>
+                <div class=" col-md-9">
+                  <input type="time" class="form-control form-control-sm" id="time" value="{{ data.time }}" name="time">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="venue" class="col-md-3">Venue</label>
+                <div class=" col-md-9">
+                  <input type="text" class="form-control form-control-sm" id="venue" value="{{ data.venue }}" name="venue" placeholder="Venue">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="reception" class="col-md-3">Reception</label>
+                <div class=" col-md-9">
+                  <input type="text" class="form-control form-control-sm" id="reception" value="{{ data.reception }}" name="reception" placeholder="Reception">
+                </div>
+              </div>
+              <div class="form-group mb-1 col-md-12 row">
+                <label for="gift" class="col-md-3">Gift Consideration</label>
+                <div class=" col-md-9">
+                  <textarea class="form-control form-control-sm" id="gift">{{ gift|default:"Your presence and prayers are more than enough. However if you wish to bless us with an additional gift, kindly consider an enveloped one"}}</textarea>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div class="form-group row">
+                <div class="col-md-12"><button type="submit" class="btn btn-primary btn-sm float-right">Submit</button></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-12 row">
+        <div class="col-md-6">
+          <div class="col-md-12 text-center">
+            <hr>
+            <h5>Template</h5>
+          </div>
+          <div class="col-md-12  container invite-header text-center">
+            <div><small><strong class="text-secondary">[a first name] [a last name]</strong></small></div>
+            <div><small>and</small></div>
+            <div><small><strong class="text-secondary">[b first name] [b last name]</strong></small></div>
+          </div>
+          <div class="text-center small-text">
+            with the blessing of their loving parents<br>
+            <small><strong class="text-secondary">[a parents]</strong></small><br>
+            and<br>
+            <small><strong class="text-secondary">[b parents]</strong></small><br>
+            invite <small><strong class="text-secondary">guest name</strong></small> to share in their joy at their wedding ceremony on <small><strong class="text-secondary">[date]</strong></small><br>
+            Venue: <small><strong class="text-secondary">[venue], at [time]</strong></small>. Reception to follow thereafter at <small><strong class="text-secondary">[reception]</strong></small><br>
+            <small><strong class="text-secondary">[gift consideration]</strong></small><br>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="col-md-12 text-center">
+            <hr>
+            <h5>Preview</h5>
+          </div>
+          <div class="col-md-12  container invite-header text-center">
+            <div><small><strong class="text-secondary">{{ data.b_first_name|default:"[a first name]" }} {{ data.b_last_name|default:"[a last name]" }}</strong></small></div>
+            <div><small>and</small></div>
+            <div><small><strong class="text-secondary">{{ data.a_first_name|default:"[b first name]" }} {{ data.a_last_name|default:"[b last name]" }}</strong></small></div>
+          </div>
+          <div class="text-center small-text">
+            with the blessing of their loving parents<br>
+            <small><strong class="text-secondary">{{ data.b_parents }}</strong></small>
+            {% if data.b_parents and data.a_parents %}<br>and<br>{% endif %}
+            <small><strong class="text-secondary">{{ data.a_parents }}</strong></small><br>
+            invite <small><strong class="text-secondary">guest name</strong></small> to share in their joy at their wedding ceremony on <small><strong class="text-secondary">{{ data.date|default:"[date]" }}</strong></small><br>
+            Venue: <small><strong class="text-secondary">{{ data.venue|default:"TBC" }}</strong></small>. Time: <small><strong class="text-secondary">{{ data.time|default:"TBC" }}</strong></small>. {% if data.reception %}Reception to follow thereafter at <small><strong class="text-secondary">{{ data.reception|default:"[reception]" }}</strong></small>{% endif %}<br>
+            <small><em>{{ data.gift }}</em></small><br>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+</div>
+{% endblock %}

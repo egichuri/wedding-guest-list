@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+	<head>
+		<title>{{ data.a_first_name }} weds {{ data.b_first_name }}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+		<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		<link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+		<noscript>
+			<link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+	</head>
+
+	<body>
+		<nav class="navbar  navbar-dark bg-dark">
+			<button class="btn btn-sm" id="menu-toggle"><span class="navbar-toggler-icon"></span></button>
+			<button class="navbar-toggler" type="button">
+				<span>
+					{{ data.date }}
+				</span>
+			</button>
+		</nav>
+		{% block content %}
+		{% endblock %}
+		<!-- Scripts -->
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+		<script src="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+		<script src="{% static 'js/browser.min.js' %}"></script>
+		<script src="{% static 'js/breakpoints.min.js' %}"></script>
+		<script src="{% static 'js/util.js' %}"></script>
+		<script src="{% static 'js/main.js' %}"></script>
+
+		<script>
+			$("#menu-toggle").click(function (e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+			$(document).ready(function () {
+				$('.row-editable').keydown(function (e) {
+					var key = e.code.toLowerCase();
+					if (key == "enter" || key == "tab") {
+						if (key == "enter") {
+							e.preventDefault();
+						}
+						var target = e.target;
+						var uid = target.id.replace("table-", "");
+						var form_id = "edit-" + uid;
+						var form = document.getElementById(form_id);
+						var before = form.elements["before-" + uid].value;
+						var after = target.textContent.trim();
+						if (after !== before) {
+							$("#after-" + uid).val(after);
+							form.submit();
+						}
+					}
+				});
+				$('#attendees-table').DataTable({
+					"paging": false,
+					"info": false,
+					"order": [
+						[1, 'asc']
+					],
+					"columnDefs": [{
+						"orderable": false,
+						"targets": 0
+					}]
+				});
+				$('#guest-table').DataTable({
+					"paging": false,
+					"info": false,
+					"order": [
+						[1, 'asc']
+					],
+					"columnDefs": [{
+						"orderable": false,
+						"targets": 0
+					}]
+				});
+			});
+
+			function copyText(_id) {
+				/* Get the text field */
+				var element = document.getElementById(_id);
+				var $temp = $("<input>");
+				$("body").append($temp);
+				$temp.val(element.value).select();
+				document.execCommand("copy");
+				$temp.remove();
+			}
+
+		</script>
+
+	</body>
+
+</html>

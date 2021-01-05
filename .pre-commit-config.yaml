@@ -1,0 +1,84 @@
+exclude: 'docs|node_modules|migrations|.git|.tox'
+default_stages: [commit]
+default_language_version:
+    python: python3.8
+
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: master
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=5000']
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: pretty-format-json
+        args: [--autofix]
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: file-contents-sorter
+      - id: fix-encoding-pragma
+      - id: forbid-new-submodules
+      - id: mixed-line-ending
+      - id: name-tests-test
+      - id: no-commit-to-branch
+      - id: sort-simple-yaml
+      - id: trailing-whitespace
+        files: (^|/).+\.(py|html|sh|css|js)$
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.4.4
+    hooks:
+    - id: autopep8
+-   repo: https://github.com/pre-commit/pre-commit
+    rev: v1.18.3
+    hooks:
+    - id: validate_manifest
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v1.25.1
+    hooks:
+    - id: pyupgrade
+-   repo: meta
+    hooks:
+    - id: check-useless-excludes
+-   repo: https://github.com/ambv/black
+    rev: 19.3b0
+    hooks:
+    - id: black
+      language_version: python3.8
+      args: [-S, -l 99, --exclude="migrations|.venv|node_modules"]
+-   repo: https://github.com/egichuri/mirrors-future
+    rev: 1fed4cb06bab1cc93e42b080b6645dd47e029b04
+    hooks:
+    - id: future
+-   repo: https://github.com/asottile/seed-isort-config
+    rev: v1.9.3
+    hooks:
+    - id: seed-isort-config
+-   repo: https://github.com/pre-commit/mirrors-isort
+    rev: v4.3.21
+    hooks:
+    - id: isort
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.782
+    hooks:
+    -   id: mypy
+        verbose: true
+        entry: bash -c 'poetry run mypy "$@" || true' --
+-   repo: local
+    hooks:
+    -  id: local-hooks
+       name: scripts/pre-commit.sh
+       entry: ./scripts/pre-commit.sh
+       language: script

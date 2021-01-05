@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "RnE"
+version = "0.1.0"
+description = "R and E"
+authors = ["egichuri <egaturu@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+django = "^3.1.2"
+psycopg2-binary = "^2.8.6"
+dj-database-url = "^0.5.0"
+django-environ = "^0.4.5"
+gunicorn = "^20.0.4"
+django-cryptography = "^1.0"
+whitenoise = "^5.2.0"
+pdbpp = "^0.10.2"
+django-sesame = "^2.0"
+requests = "^2.24.0"
+reportlab = "^3.5.55"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+isort = "^5.6.3"
+flake8 = "^3.8.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

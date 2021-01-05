@@ -1,0 +1,29 @@
+asgiref==3.2.10; python_version >= "3.6" and python_version < "4.0"
+certifi==2020.6.20; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+cffi==1.14.3; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.5"
+chardet==3.0.4; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+cryptography==3.2; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.5"
+dj-database-url==0.5.0
+django-appconf==1.0.4; python_version >= "3.5"
+django-cryptography==1.0; python_version >= "3.5"
+django-environ==0.4.5
+django-sesame==2.0; python_version >= "3.5" and python_version < "4.0"
+django==3.1.2; python_version >= "3.6"
+fancycompleter==0.9.1
+gunicorn==20.0.4; python_version >= "3.4"
+idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+pdbpp==0.10.2
+pillow==8.0.1; python_version >= "3.6"
+psycopg2-binary==2.8.6; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
+pycparser==2.20; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.5"
+pygments==2.7.1; python_version >= "3.5"
+pyreadline==2.1; platform_system == "Windows"
+pyrepl==0.9.0
+pytz==2020.1; python_version >= "3.6" and python_version < "4.0"
+reportlab==3.5.55
+requests==2.24.0; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
+six==1.15.0; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.5"
+sqlparse==0.4.1; python_version >= "3.6" and python_version < "4.0"
+urllib3==1.25.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4"
+whitenoise==5.2.0; python_version >= "3.5" and python_version < "4"
+wmctrl==0.3

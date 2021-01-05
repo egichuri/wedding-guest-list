@@ -1,0 +1,31 @@
+{% extends blank_template %}
+{% load static %}
+{% block content %}
+  <div class="container">
+    <div class="row align-middle">
+      <div class="col-md-3"></div>
+      <div class="card col-md-6 centered">
+        <div class="card-body justify-content-center">
+          {% if data.success %}
+            <p class="text-success">Please check your mailbox for the login link</p>
+          {% elif data.error %}
+            <p class="text-danger">Error requesting login link. Please try again</p>
+          {% endif %}
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+              <label for="email" class="col-md-3">Email Address</label>
+              <div class=" col-md-9">
+                <input required type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+              </div>
+            </div>
+            <div class="form-group row">
+              <span class="col-md-12"><button type="submit" class="btn btn-primary btn-sm float-right">Get Link</button></span>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </div>
+{% endblock %}

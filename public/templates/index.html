@@ -1,0 +1,221 @@
+{% extends base_template %}
+{% load static %}
+{% load formatter %}
+{% block content %}
+<!-- Header -->
+<header id="header">
+	<div class="logo">
+		<span class="icon fa-gem"></span>
+	</div>
+	<div class="content">
+		<div class="inner">
+			<h1>{{ data.a_first_name }} weds {{ data.b_first_name }}</h1>
+			<p></p>
+		</div>
+	</div>
+	<nav>
+		<ul>
+			{% edit_locked ignore_user="true" as locked %}
+			{% if data.invitation and not locked %}
+			<li><a href="#invitation">Manage Invite</a></li>
+			{% endif %}
+		</ul>
+	</nav>
+</header>
+
+<!-- Main -->
+<div id="main">
+
+	<!-- Intro -->
+	<article id="invitation" class="p-1 pt-3 text-dark">
+		<div class="col-md-12  container invite-header align-center">
+			<div>{{ data.a_first_name }} {{ data.a_last_name }}</div>
+			<div><small>and</small></div>
+			<div>{{ data.b_first_name }} {{ data.b_last_name }}</div>
+		</div>
+		<div class="col-md-12  container align-center small-text">
+			<hr class="m-1 p-0 text-dark">
+			with the blessing of their loving parents<br>
+			<small><strong class="text-secondary">{{ data.a_parents }}</strong></small><br>
+			{% if data.b_parents and data.a_parents %}<br>and<br>{% endif %}
+			<small><strong class="text-secondary">{{ data.b_parents }}</strong></small>
+			invite <small><strong class="text-secondary">guest name</strong></small> to share in their joy at their wedding ceremony on <small><strong class="text-secondary">{{ data.date|default:"[date]" }}</strong></small><br>
+			Venue: <small><strong class="text-secondary">{{ data.venue|default:"TBC" }}</strong></small>. Time: <small><strong class="text-secondary">{{ data.time|default:"TBC" }}</strong></small>. {% if data.reception %}Reception to follow thereafter at <small><strong class="text-secondary">{{ data.reception|default:"[reception]" }}</strong></small>{% endif %}<br>
+			<small><em>{{ data.gift }}</em></small><br>
+			<p class="font-weight-bold text-dark mb-2">Invite admits: {{ data.admits }}</p>
+		</div>
+		<div class="text-dark container mt-2">
+			{% edit_locked as locked %}
+			{% if data.invitation %}
+			<div class="table-responsive row col-md-12 pr-1">
+				<form action="" method="post" class="smaller-text">
+					{% csrf_token %}
+					<input type="hidden" name="src" value="rsvp">
+					<input type="hidden" name="invite_uid" value="{{ data.invitation.uid }}">
+					<hr>
+					<table class="table mb-1">
+						<tr class="border-0">
+							<td class="col-md-12 align-center py-0 border-0">
+								{% if locked %}
+								<strong class="text-dark">Editing locked.</strong>
+								{% elif data.invitation.rsvp.lower == "yes" and not locked %}
+								Please click &nbsp; <i class="fas fa-trash-alt text-danger"></i> &nbsp; on unused slots
+								{% endif %}
+							</td>
+						</tr>
+						<tr class="border-0">
+							<td class="col-md-12 align-center border-0">
+								<div class="row align-center">
+									<div class="form-group mb-1 col-md-12 align-center">
+										<div class="form-check form-check-inline">
+											<input {% edit_locked radio="true" %} {% if data.invitation.rsvp.lower == "yes" %} checked{% endif %} class="form-check-input" onchange="this.form.submit()" type="radio" name="rsvp" id="confirm_yes" value="yes">
+											<label class="form-check-label" for="confirm_yes">Will be there 🎉 </label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input {% if data.invitation.rsvp.lower == "no" %} checked{% endif %} class="form-check-input" onchange="this.form.submit()" type="radio" name="rsvp" id="confirm_no" value="no">
+											<label class="form-check-label" for="confirm_no">Regrettably unable to attend 😔</label>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			{% if data.invitation.rsvp.lower == "yes" %}
+			<div class="table-responsive row col-md-12 pr-1">
+				<form action="" method="post" class="smaller-text">
+					{% csrf_token %}
+					<table class="table mb-1">
+						{% if data.errors > 0 %}
+						<tr class="border-0">
+							<td class="align-center text-danger" colspan="2">
+								<small>We encountered an error saving some of the data. Please confirm and try again (first name, last name and phone number are required).</small>
+							</td>
+						</tr>
+						{% elif data.saved > 0 %}
+						<tr class="border-0">
+							<td class="align-center text-success" colspan="2">
+								<small>Data successfully saved. If you need to edit any of the disabled fields please get in touch</small>
+							</td>
+						</tr>
+						{% endif %}
+						<input type="hidden" name="count" value="{{ data.attendees|length }}">
+						<input type="hidden" name="invite_uid" value="{{ data.invitation.uid }}">
+						<input type="hidden" name="src" value="details">
+						{% for attendee in data.attendees %}
+						<tr class="border-0" id="tr{{ forloop.counter}}">
+							<td class="col-md-11 pr-0">
+								<div class="row">
+									<div class="form-group mb-1 col-md-6 row">
+										<label for="first_name{{ forloop.counter}}" class="col-md-4 p-1"><strong><span class="text-dark align-sm-right">First Name</span></strong></label>
+										<div class="col-md-8 mx-0 pl-0">
+											<input type="hidden" name="uid{{ forloop.counter}}" value="{{ attendee.uid }}">
+											<input type="hidden" name="delete{{ forloop.counter}}" value="">
+											<input {% edit_locked attendee=attendee for_input="true" %} type="text" value="{{ attendee.first_name.title }}" data-invite="{{ data.invitation.added_for.lower }}" oninput="requirePhone(this, 'first_name')" class="form-control form-control-sm" id="first_name{{ forloop.counter}}" name="first_name{{ forloop.counter}}" placeholder="First Name">
+										</div>
+									</div>
+									<div class="form-group mb-1 col-md-6 row">
+										<label for="last_name{{ forloop.counter}}" class="col-md-4 align-md-right p-1"><strong><span class="text-dark align-sm-right">Last Name</span></strong></label>
+										<div class="col-md-8 mx-0 pl-0">
+											<input {% edit_locked attendee=attendee for_input="true" %} type="text" value="{{ attendee.last_name.title }}" data-invite="{{ data.invitation.added_for.lower }}" oninput="requirePhone(this, 'last_name')" class="form-control form-control-sm" id="last_name{{ forloop.counter}}" name="last_name{{ forloop.counter}}" placeholder="Last Name">
+										</div>
+									</div>
+								</div>
+								<div class="row {% if data.invitation.added_for.lower == 'kids' %} d-none {% endif %}">
+									<div class="form-group mb-1 col-md-6 row">
+										<label for="phone_number{{ forloop.counter}}" class="col-md-4 p-1"><strong><span class="text-dark align-sm-right">Phone Number</span></strong></label>
+										<div class="col-md-8 mx-0 pl-0">
+											<input {% edit_locked attendee=attendee for_input="true" %} type="text" value="{{ attendee.phone_number }}" class="form-control form-control-sm" id="phone_number{{ forloop.counter}}" name="phone_number{{ forloop.counter}}" placeholder="Phone Number">
+										</div>
+									</div>
+									<div class="form-group mb-1 col-md-6 row">
+										<label for="id_number{{ forloop.counter}}" class="col-md-4 align-md-right p-1"><strong><span class="text-dark align-sm-right">ID Number</span></strong></label>
+										<div class="col-md-8 mx-0 pl-0">
+											{% if attendee.id_number_disp %}
+											<input disabled type="text" value="{{ attendee.id_number_disp }}" class="form-control form-control-sm" id="id_number{{ forloop.counter}}" name="id_number{{ forloop.counter}}" placeholder="ID Number">
+											{% else %}
+											<input type="text" {% edit_locked for_input="true" %} value="{{ attendee.id_number }}" class="form-control form-control-sm" id="id_number{{ forloop.counter}}" name="id_number{{ forloop.counter}}" placeholder="ID Number">
+											{% endif %}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group mb-1 col-md-6 row {% if data.invitation.added_for.lower == 'kids' %} d-none {% endif %}"">
+										<label for="residence{{ forloop.counter}}" class="col-md-4 p-1"><strong><span class="text-dark align-sm-right">Residence</span></strong></label>
+										<div class="col-md-8 mx-0 pl-0">
+											<input type="text" {% edit_locked for_input="true" %} value="{{ attendee.residence }}" class="form-control form-control-sm" id="residence{{ forloop.counter}}" name="residence{{ forloop.counter}}" placeholder="Residence">
+										</div>
+									</div>
+									{% if attendee.table %}
+									<div class="form-group mb-1 col-md-6 row">
+										<label for="table{{ forloop.counter}}" class="col-md-4 p-1"><strong><span class="text-dark align-sm-right">Table Number</span></strong></label>
+										<div class="col-md-8 mx-0 pl-0">
+											<input type="text" readonly value="{{ attendee.table }}" class="form-control form-control-sm" id="table{{ forloop.counter}}" name="table{{ forloop.counter}}">
+										</div>
+									</div>
+									{% endif %}
+								</div>
+								<div class="container align-md-middle d-none">
+									<div class="form-group mb-1row">
+										<div class="row py-2">
+											<div class="col-md-3">
+												<strong class="text-dark">Attendance:&nbsp;&nbsp;</strong>
+											</div>
+											<div class="col-md-9 row">
+												<div class="col-sm px-0">
+													<div class="form-check form-check-inline align-middle">
+														<input {% edit_locked attendee=attendee for_input="true" %} class="form-check-input" type="checkbox" id="service{{ forloop.counter}}" {% if attendee.attendance.wedding_ceremony %} checked{% endif %} name="service{{ forloop.counter}}">
+														<label class="form-check-label" for="service{{ forloop.counter}}">Wedding Ceremony</label>
+													</div>
+												</div>
+												<div class="col-sm px-0">
+													<div class="form-check form-check-inline align-middle">
+														<input {% edit_locked attendee=attendee for_input="true" %} class="form-check-input" type="checkbox" id="reception{{ forloop.counter}}" {% if attendee.attendance.reception %} checked{% endif %} name="reception{{ forloop.counter}}">
+														<label class="form-check-label" for="reception{{ forloop.counter}}">Reception</label>
+													</div>
+												</div>
+												<div class="col-sm px-0">
+													<div class="form-check form-check-inline align-middle">
+														<input {% edit_locked attendee=attendee for_input="true" %} class="form-check-input" type="checkbox" id="evening_party{{ forloop.counter}}" {% if attendee.attendance.evening_party %} checked{% endif %} name="evening_party{{ forloop.counter}}">
+														<label class="form-check-label" for="evening_party{{ forloop.counter}}">Evening Party</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<hr class="m-0 p-0">
+									</div>
+								</div>
+							</td>
+							<td class="align-middle col-md-1 pl-0">
+								{% if data.invitation.added_for.lower == "group" %}
+								<button id="{{ forloop.counter}},{{attendee.uid}}" type="button" onclick="deleteSlot(this)" class="btn btn-outline-light border-0 icon fa-trash-alt text-danger"></button>
+								{% elif forloop.counter != 1 and attendee.attends_as.lower != "couple" and data.invitation.added_for.lower != "kids" and not locked %}
+								<button id="{{ forloop.counter}},{{attendee.uid}}" type="button" onclick="deleteSlot(this)" class="btn btn-outline-light border-0 icon fa-trash-alt text-danger"></button>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+						<tr class="border-0 align-right">
+							<td colspan="2">
+								<a href="#" class="btn btn-secondary btn-sm-sm">Close</a>
+								{% if not locked%}
+								<button type="submit" class="btn btn-primary btn-sm-sm">Save</button>
+								{% endif %}
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			{% endif %}
+			{% endif %}
+		</div>
+		<div class="col-md-12">
+			<hr class="my-1 p-0">
+		</div>
+	</article>
+
+</div>
+{% endblock %}

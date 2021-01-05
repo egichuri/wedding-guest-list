@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" />
+        <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" media="screen" href="{% static 'css/style.css' %}" />
+        <link rel="stylesheet" media="screen" href="{% static 'css/error_page.css' %}" />
+        <title>Server Error</title>
+    </head>
+
+    <body class="background error-page-wrapper background-color background-image">
+
+        <div class="content-container shadow">
+            <div class="head-line secondary-text-color">
+                503
+            </div>
+            <div class="subheader primary-text-color">
+                Looks like we're having some server issues.
+            </div>
+            <div class="hr"></div>
+            <div class="context secondary-text-color">
+
+                <p>
+                    Go back to the previous page and try again. If you think something is broken, report a problem.
+                </p>
+
+
+            </div>
+            <div class="buttons-container single-button">
+                <a class="button" href="#"><span class="fa fa-warning"></span> Retry</a>
+            </div>
+        </div>
+
+        <!-- OneTrust Cookies Consent Notice (statuspage.io, en-GB) start -->
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="https://cdn.cookielaw.org/consent/0800f092-2124-46ec-b11d-b4f48b677302.js" type="text/javascript" charset="UTF-8"></script>
+        <script type="text/javascript">
+            function OptanonWrapper() {}
+
+        </script>
+        <!-- OneTrust Cookies Consent Notice (statuspage.io, en-GB) end -->
+
+    </body>
+
+</html>

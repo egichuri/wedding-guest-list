@@ -1,0 +1,296 @@
+{% extends blank_template %}
+{% load static %}
+{% load formatter %}
+{% block content %}
+<section id="wrapper" class="d-flex">
+  <div class="bg-light border-right pt-4" id="sidebar-wrapper">
+    <div class="container font-weight-bold small">
+      <div class="align-middle col-md-12">
+        <div class="list-group list-group-flush">
+          {% if is_couple %}
+          <div class="list-group-item list-group-item-action p-2 bg-light border-0">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-guest">New Invite</button>
+          </div>
+          {% endif %}
+          <div class="sidebar-heading pt-4">Invites</div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            Raw Guest Count: {{ count.guests }}
+          </div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            Kids: {{ count.kids }}
+          </div>
+          <div class="sidebar-heading">Attendance</div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            Confirmed: {{ confirmed }} <small><em>(Couple/Kids included)</em></small>
+          </div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            Allocated Seats: {{ allocated }}<br><small><em>(Click table number column to allocate table)</em></small>
+          </div>
+        </div>
+        <div class="sidebar-heading">Actions </div>
+        <div class="list-group list-group-flush">
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            <a href="/print?data=invites">
+              Print Invites <small><em>(pdf)</em></small>
+            </a>
+          </div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            <a href="/print?data=attendees">
+              Print Guest List <small><em>(pdf - IDs masked)</em></small>
+            </a>
+          </div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            <a href="/print?data=attendees&ids=true">
+              Print Guest List <small><em>(pdf - with IDS)</em></small>
+            </a>
+          </div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            <a href="/print?data=attendees&ext=csv">
+              Print Guest List <small><em>(csv - IDs masked)</em></small>
+            </a>
+          </div>
+          <div class="list-group-item list-group-item-action p-2 bg-light">
+            <a href="/print?data=attendees&ext=csv&ids=true">
+              Print Guest List <small><em>(csv with IDs)</em></small>
+            </a>
+          </div>
+        </div>
+        <div class="sidebar-heading">Tables</div>
+        <div class="row">
+          <ul class="list-group list-group-flush">
+            {% for each, num in tables.items %}
+            <li class="list-group-item bg-light border-0 py-0">
+              {% if each == '-' %}
+              Unassigned: {{ num }}
+              {% else %}
+              <span class="{% if num == table_count %} text-success {% endif %}">{{ each }}: {{ num }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="page-content-wrapper">
+    <div class="container-fluid pt-3">
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <div class="modal" id="add-guest" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Add Guest</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form method="POST">
+                  {% csrf_token %}
+                  <div class="modal-body">
+                    <div class="form-group row">
+                      <label for="first_name" class="col-md-3">First Name</label>
+                      <div class=" col-md-9">
+                        <input required type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="first_name" class="col-md-3">Last Name</label>
+                      <div class=" col-md-9">
+                        <input required type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="phone_number" class="col-md-3">Phone Number</label>
+                      <div class=" col-md-9">
+                        <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="category" class="col-md-3">Category</label>
+                      <div class=" col-md-9">
+                        <select id="category" name="category" class="form-control custom-select">
+                          <option selected, value="">Select one</option>
+                          <option value="4">Family</option>
+                          <option value="3">Bridal Team</option>
+                          <option value="5">Guest</option>
+                          <option value="2">Planner</option>
+                          <option value="6">Service Provider</option>
+                          <option value="7">Group</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="slots" class="col-md-3">Adults</label>
+                      <div class=" col-md-9">
+                        <input required type="number" class="form-control" id="slots" name="slots" placeholder="0">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="kids" class="col-md-3">Kids</label>
+                      <div class=" col-md-9">
+                        <input type="number" class="form-control" id="kids" name="kids" placeholder="0">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="float-left py-2 small-text">
+            {% if content.result %}
+            {% if content.result.invite_created %}
+            <p class="text-success">Guest list updated</p>
+            {% elif content.result.phone_number %}
+            <p class="text-danger">{{ content.result.phone_number }}</p>
+            {% elif content.result.table_errors %}
+            <p>
+              {% for error in content.result.table_errors %}
+              <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </p>
+            {% elif content.result.invite %}
+            <p class="text-danger">{{ content.result.invite }}</p>
+            {% else %}
+            <p class="text-danger">Error adding user. Please try again</p>
+            {% endif %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-12">
+          <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="attendees-tab" data-toggle="tab" href="#attendees" role="tab" aria-controls="attendees" aria-selected="true">Attendees</a>
+              <a class="nav-item nav-link" id="guest-list-tab" data-toggle="tab" href="#guest-list" role="tab" aria-controls="guest-list" aria-selected="false">Invites</a>
+            </div>
+          </nav>
+          <div class="tab-content col-md-12" id="nav-tabContent">
+            <div class="tab-pane fade" id="guest-list" role="tabpanel" aria-labelledby="guest-list-tab">
+              <div class="table-responsive">
+                <table id="guest-table" class="table table-sm small" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Phone Number</th>
+                      <th>RSVP</th>
+                      <th>Adults</th>
+                      <th>Kids</th>
+                      {% if is_couple %}<th>Invite Link</th>{% endif %}
+                    </tr>
+                  </thead>
+                  <tbody class="table-numbered">
+                    {% for guest in guests %}
+                    <tr>
+                      <td></td>
+                      <td>{{ guest.first_name }} {{ guest.last_name }}</td>
+                      <td>{{ guest.phone_number }}</td>
+                      <td>
+                        {% if guest.rsvp.lower == "yes" %}
+                        <span class="text-success">
+                          {{ guest.rsvp_count }} -
+                          {% else %}
+                          <span class="text-danger">
+                            {% endif %}
+                            {{ guest.rsvp }}
+                          </span>
+                      </td>
+                      <td>
+                        {% if guest.added_for.lower == "kids" %}
+                        -
+                        {% else %}
+                        {{ guest.parties }}
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if guest.added_for.lower == "kids" %}
+                        {{ guest.parties }}
+                        {% else %}
+                        {{ guest.kids_allowed }}
+                        {% endif %}
+                      </td>
+                      {% if is_couple %}
+                      <td>
+                        {% if guest.link %}
+                        <input type="hidden" value="https://{{ guest.link }}" id="{{guest.uid}}">
+                        <span class="pointer" onclick="copyText('{{guest.uid}}')"><em>copy</em></span> |&nbsp;
+                        <a target="_blank" href="//{{ guest.link }}#invitation">
+                          <i class="fas fa-link pointer"></i>
+                        </a>
+                        {% endif %}
+                      </td>
+                      {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td class="text-center" colspan="6">
+                        <h3>Nothing Here Yet</h3>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade show active" id="attendees" role="tabpanel" aria-labelledby="attendees-tab">
+              <div class="table-responsive">
+                <table id="attendees-table" class="table table-sm small" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Allocated Table</th>
+                      <th>Phone Number</th>
+                      <th>ID Number</th>
+                      <th>Residence</th>
+                      <th>Invite</th>
+                      <th>Category</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-numbered">
+                    {% for attendee in all_attendees %}
+                    <tr>
+                      <td></td>
+                      <td>{{ attendee.first_name }}&nbsp;{{ attendee.last_name }}</td>
+                      <td class="row">
+                        <form method="POST" id="edit-{{ attendee.uid }}">
+                          {% csrf_token %}
+                          <input type="hidden" name="src" value="table-edit">
+                          <input type="hidden" name="table_before" id="before-{{ attendee.uid }}" value="{{ attendee.table }}">
+                          <input type="hidden" name="table_after" id="after-{{ attendee.uid }}" value="{{ attendee.table }}">
+                          <input type="hidden" name="uid" value="{{ attendee.uid }}">
+                        </form>
+                        <span class="col-md-12 row-editable" contenteditable="true" id="table-{{ attendee.uid }}">
+                          {{ attendee.table }}
+                        </span>
+                      </td>
+                      <td>{{ attendee.phone_number }}</td>
+                      <td>{{ attendee.id_number_disp }}</td>
+                      <td>{{ attendee.residence }}</td>
+                      <td>{{ attendee.invite }}</td>
+                      <td>{{ attendee.attends_as }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td class="text-center" colspan="7">
+                        <h3>Nothing Here Yet</h3>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
